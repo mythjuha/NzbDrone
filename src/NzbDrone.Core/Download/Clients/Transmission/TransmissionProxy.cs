@@ -14,8 +14,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
     public interface ITransmissionProxy
     {
         List<TransmissionTorrent> GetTorrents(TransmissionSettings settings);
-        void AddTorrentFromUrl(String torrentUrl, TransmissionSettings settings);
-        void AddTorrentFromData(Byte[] torrentData, TransmissionSettings settings);
+        void AddTorrentFromUrl(String torrentUrl, String downloadDirectory, TransmissionSettings settings);
+        void AddTorrentFromData(Byte[] torrentData, String downloadDirectory, TransmissionSettings settings);
         void SetTorrentSeedingConfiguration(String hash, TorrentSeedConfiguration seedConfiguration, TransmissionSettings settings);
         Dictionary<String, Object> GetConfig(TransmissionSettings settings);
         String GetVersion(TransmissionSettings settings);
@@ -42,20 +42,28 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return torrents;
         }
 
-        public void AddTorrentFromUrl(String torrentUrl, TransmissionSettings settings)
+        public void AddTorrentFromUrl(String torrentUrl, String downloadDirectory, TransmissionSettings settings)
         {
             var arguments = new Dictionary<String, Object>();
             arguments.Add("filename", torrentUrl);
-            arguments.Add("download-dir", String.Empty);
+
+            if (!downloadDirectory.IsNullOrWhiteSpace())
+            {
+                arguments.Add("download-dir", downloadDirectory);
+            }
 
             ProcessRequest("torrent-add", arguments, settings);
         }
 
-        public void AddTorrentFromData(Byte[] torrentData, TransmissionSettings settings)
+        public void AddTorrentFromData(Byte[] torrentData, String downloadDirectory, TransmissionSettings settings)
         {
             var arguments = new Dictionary<String, Object>();
             arguments.Add("metainfo", Convert.ToBase64String(torrentData));
-            arguments.Add("download-dir", String.Empty);
+
+            if (!downloadDirectory.IsNullOrWhiteSpace())
+            {
+                arguments.Add("download-dir", downloadDirectory);
+            }
 
             ProcessRequest("torrent-add", arguments, settings);
         }

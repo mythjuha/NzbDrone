@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         protected override String AddFromMagnetLink(RemoteEpisode remoteEpisode, String hash, String magnetLink)
         {
-            _proxy.AddTorrentFromUrl(magnetLink, Settings);
+            _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         protected override String AddFromTorrentFile(RemoteEpisode remoteEpisode, String hash, String filename, Byte[] fileContent)
         {
-            _proxy.AddTorrentFromData(fileContent, Settings);
+            _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(), Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -64,6 +64,16 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             }
 
             return hash;
+        }
+
+        private String GetDownloadDirectory()
+        {
+            if (Settings.TvCategory.IsNullOrWhiteSpace()) return null;
+
+            var config = _proxy.GetConfig(Settings);
+            var destDir = (String)config.GetValueOrDefault("download-dir");
+
+            return String.Format("{0}/.{1}", destDir, Settings.TvCategory);
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()
@@ -84,11 +94,20 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             foreach (var torrent in torrents)
             {
+                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, torrent.DownloadDir);
+
+                if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+                {
+                    var directories = outputPath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                    if (!directories.Contains(String.Format(".{0}", Settings.TvCategory))) continue;
+                }
+
                 var remoteEpisode = GetRemoteEpisode(torrent.Name);
                 if (remoteEpisode == null || remoteEpisode.Series == null) continue;
 
                 var item = new DownloadClientItem();
                 item.DownloadClientId = torrent.HashString.ToUpper();
+                item.Category = Settings.TvCategory;
                 item.Title = torrent.Name;
                 item.RemoteEpisode = remoteEpisode;
 
@@ -96,7 +115,6 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 item.DownloadTime = TimeSpan.FromSeconds(torrent.SecondsDownloading);
                 item.Message = torrent.ErrorString;
 
-                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, torrent.DownloadDir);
                 item.OutputPath = Path.Combine(outputPath, torrent.Name);
                 item.RemainingSize = torrent.LeftUntilDone;
                 item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
