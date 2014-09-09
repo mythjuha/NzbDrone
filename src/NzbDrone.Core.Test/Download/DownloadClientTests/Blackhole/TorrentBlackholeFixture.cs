@@ -66,8 +66,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         public void completed_download_should_have_required_properties()
         {
             GivenCompletedItem();
+
             var result = Subject.GetItems().Single();
+
             VerifyCompleted(result);
+        }
+
+        [Test]
+        public void should_return_category()
+        {
+            GivenCompletedItem();
+
+            var result = Subject.GetItems().Single();
+
+            // We must have a category or CDH won't pick it up.
+            result.Category.Should().NotBeNullOrWhiteSpace();
         }
 
         [Test]
