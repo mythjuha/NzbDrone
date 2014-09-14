@@ -55,14 +55,32 @@ namespace NzbDrone.Core.Indexers.Nyaa
         {
             var description = GetDescription(torrentElement).Value;
             var matches = _descriptionRegex.Match(description);
-            return Convert.ToInt32(matches.Groups["seeders"].Value);
+
+            var seeders = Convert.ToInt32(matches.Groups["seeders"].Value);
+            var peers = Convert.ToInt32(matches.Groups["peers"].Value);
+            
+            if (seeders == 0 && peers == 0)
+            {
+                return null;
+            }
+
+            return seeders;
         }
 
         protected override int? Peers(XElement torrentElement)
         {
             var description = GetDescription(torrentElement).Value;
             var matches = _descriptionRegex.Match(description);
-            return Convert.ToInt32(matches.Groups["peers"].Value);
+
+            var seeders = Convert.ToInt32(matches.Groups["seeders"].Value);
+            var peers = Convert.ToInt32(matches.Groups["peers"].Value);
+
+            if (seeders == 0 && peers == 0)
+            {
+                return null;
+            }
+
+            return peers;
         }
     }
 }
