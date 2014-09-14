@@ -73,53 +73,98 @@ namespace NzbDrone.Core.Download
             }
 
             String hash = null;
-            String actualHash = null;
 
             if (!magnetUrl.IsNullOrWhiteSpace())
             {
-                try
-                {
-                    hash = new MagnetLink(magnetUrl).InfoHash.ToHex();
-                }
-                catch (FormatException ex)
-                {
-                    _logger.ErrorException(String.Format("Failed to parse magnetlink for episode '{0}': '{1}'",
-                        remoteEpisode.Release.Title, torrentInfo.MagnetUrl), ex);
-                }
-
-                if (hash != null)
-                {
-                    actualHash = AddFromMagnetLink(remoteEpisode, hash, magnetUrl);
-                }
+                hash = DownloadFromMagnetUrl(remoteEpisode, magnetUrl);
             }
-            
+
             if (hash == null && !torrentUrl.IsNullOrWhiteSpace())
             {
-                Byte[] torrentFile = null;
-
-                try
-                {
-                    torrentFile = _httpClient.Get(new HttpRequest(torrentUrl)).ResponseData;
-                }
-                catch (WebException ex)
-                {
-                    _logger.ErrorException(String.Format("Downloading torrentfile for episode '{0}' failed ({1})",
-                        remoteEpisode.Release.Title, torrentUrl), ex);
-
-                    throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed", ex);
-                }
-                
-                
-                var filename = String.Format("{0}.torrent", FileNameBuilder.CleanFileName(remoteEpisode.Release.Title));
-
-                hash = _torrentFileInfoReader.GetHashFromTorrentFile(torrentFile);
-
-                actualHash = AddFromTorrentFile(remoteEpisode, hash, filename, torrentFile);
+                hash = DownloadFromWebUrl(remoteEpisode, torrentUrl);
             }
 
-            if (hash == null || actualHash == null)
+            if (hash == null)
             {
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed");
+            }
+
+            return hash;
+        }
+
+        private string DownloadFromWebUrl(RemoteEpisode remoteEpisode, String torrentUrl)
+        {
+            Byte[] torrentFile = null;
+
+            try
+            {
+                var request = new HttpRequest(torrentUrl);
+                request.Headers.Accept = "application/x-bittorrent";
+                request.AllowAutoRedirect = false;
+
+                var response = _httpClient.Get(request);
+
+                if (response.StatusCode == HttpStatusCode.SeeOther)
+                {
+                    var locationHeader = (string)response.Headers.GetValueOrDefault("Location", null);
+
+                    if (locationHeader != null && locationHeader.StartsWith("magnet:"))
+                    {
+                        return DownloadFromMagnetUrl(remoteEpisode, locationHeader);
+                    }
+                    else
+                    {
+                        throw new WebException("Remote website tried to redirect without providing a location.");
+                    }
+                }
+
+                torrentFile = response.ResponseData;
+            }
+            catch (WebException ex)
+            {
+                _logger.ErrorException(String.Format("Downloading torrentfile for episode '{0}' failed ({1})",
+                    remoteEpisode.Release.Title, torrentUrl), ex);
+
+                throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed", ex);
+            }
+
+
+            var filename = String.Format("{0}.torrent", FileNameBuilder.CleanFileName(remoteEpisode.Release.Title));
+
+            var hash = _torrentFileInfoReader.GetHashFromTorrentFile(torrentFile);
+
+            var actualHash = AddFromTorrentFile(remoteEpisode, hash, filename, torrentFile);
+
+            if (hash != actualHash)
+            {
+                _logger.Warn(
+                    "{0} did not return the expected InfoHash for '{1}', NzbDrone could potential lose track of the download in progress.",
+                    Definition.Implementation, remoteEpisode.Release.DownloadUrl);
+            }
+
+            return actualHash;
+        }
+
+        private String DownloadFromMagnetUrl(RemoteEpisode remoteEpisode, String magnetUrl)
+        {
+            String hash = null;
+            String actualHash = null;
+
+            try
+            {
+                hash = new MagnetLink(magnetUrl).InfoHash.ToHex();
+            }
+            catch (FormatException ex)
+            {
+                _logger.ErrorException(String.Format("Failed to parse magnetlink for episode '{0}': '{1}'",
+                    remoteEpisode.Release.Title, magnetUrl), ex);
+
+                return null;
+            }
+
+            if (hash != null)
+            {
+                actualHash = AddFromMagnetLink(remoteEpisode, hash, magnetUrl);
             }
 
             if (hash != actualHash)
@@ -129,7 +174,7 @@ namespace NzbDrone.Core.Download
                     Definition.Implementation, remoteEpisode.Release.DownloadUrl);
             }
 
-            return hash;
+            return actualHash;
         }
     }
 }

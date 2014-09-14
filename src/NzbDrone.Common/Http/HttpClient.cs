@@ -46,6 +46,7 @@ namespace NzbDrone.Common.Http
             webRequest.Method = request.Method.ToString();
             webRequest.UserAgent = _userAgent;
             webRequest.KeepAlive = false;
+            webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
 
             if (!RuntimeInfoBase.IsProduction)
             {

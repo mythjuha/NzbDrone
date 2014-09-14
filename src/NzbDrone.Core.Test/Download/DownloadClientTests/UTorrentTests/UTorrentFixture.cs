@@ -100,6 +100,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
                   .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0]));
         }
 
+        protected void GivenRedirectToMagnet()
+        {
+            var httpHeader = new HttpHeader();
+            httpHeader["Location"] = "magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp";
+
+            Mocker.GetMock<IHttpClient>()
+                  .Setup(s => s.Get(It.IsAny<HttpRequest>()))
+                  .Returns<HttpRequest>(r => new HttpResponse(r, httpHeader, new Byte[0], System.Net.HttpStatusCode.SeeOther));
+        }
+
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<IUTorrentProxy>()
@@ -312,6 +322,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
             var item = Subject.GetItems().Single();
 
             item.OutputPath.Should().Be(@"D:\" + _title);
+        }
+
+        [Test]
+        public void Download_should_handle_http_redirect_to_magnet()
+        {
+            GivenRedirectToMagnet();
+            GivenSuccessfulDownload();
+
+            var remoteEpisode = CreateRemoteEpisode();
+
+            var id = Subject.Download(remoteEpisode);
+
+            id.Should().NotBeNullOrEmpty();
         }
     }
 }
