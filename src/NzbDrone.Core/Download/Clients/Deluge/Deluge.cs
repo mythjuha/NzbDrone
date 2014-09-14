@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             if (destDir != null)
             {
-                status.OutputRootFolders = new List<string> { destDir };
+                status.OutputRootFolders = new List<string> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
             }
             
             return status;

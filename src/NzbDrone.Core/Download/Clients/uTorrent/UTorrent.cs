@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
             if (destDir != null)
             {
-                status.OutputRootFolders = new List<string> { destDir };
+                status.OutputRootFolders = new List<String> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
             }
 
             return status;

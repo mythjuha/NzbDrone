@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 
             var configItems = new Dictionary<String, Object>();
 
-            configItems.Add("download-dir", @"C:\Downloads\Finished\transmission".AsOsAgnostic());
+            configItems.Add("download-dir", @"C:/Downloads/Finished/transmission");
             configItems.Add("incomplete-dir", null);
             configItems.Add("incomplete-dir-enabled", false);
 
@@ -234,7 +234,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<ITransmissionProxy>()
-                .Verify(v => v.AddTorrentFromData(It.IsAny<Byte[]>(), @"C:\Downloads\Finished\transmission/.nzbdrone".AsOsAgnostic(), It.IsAny<TransmissionSettings>()), Times.Once());
+                .Verify(v => v.AddTorrentFromData(It.IsAny<Byte[]>(), @"C:/Downloads/Finished/transmission/.nzbdrone", It.IsAny<TransmissionSettings>()), Times.Once());
         }
 
         [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
@@ -307,7 +307,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 
             result.IsLocalhost.Should().BeTrue();
             result.OutputRootFolders.Should().NotBeNull();
-            result.OutputRootFolders.First().Should().Be(@"C:\Downloads\Finished\transmission".AsOsAgnostic());
+            result.OutputRootFolders.First().Should().Be(@"C:\Downloads\Finished\transmission");
         }
 
         [Test]
@@ -315,7 +315,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         {
             GivenTvCategory();
 
-            _downloading.DownloadDir = @"C:\Downloads\Finished\transmission\.nzbdrone".AsOsAgnostic();
+            _downloading.DownloadDir = @"C:/Downloads/Finished/transmission/.nzbdrone";
 
             GivenTorrents(new List<TransmissionTorrent> 
                 {
@@ -327,6 +327,24 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 
             items.Count.Should().Be(1);
             items.First().Status.Should().Be(DownloadItemStatus.Downloading);
+        }
+
+        [Test]
+        public void should_fix_forward_slashes()
+        {
+            WindowsOnly();
+
+            _downloading.DownloadDir = @"C:/Downloads/Finished/transmission";
+
+            GivenTorrents(new List<TransmissionTorrent> 
+                {
+                    _downloading
+                });
+
+            var items = Subject.GetItems().ToList();
+
+            items.Should().HaveCount(1);
+            items.First().OutputPath.Should().Be(@"C:\Downloads\Finished\transmission\" + _title);
         }
     }
 }

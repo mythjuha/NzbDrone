@@ -94,11 +94,19 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             foreach (var torrent in torrents)
             {
-                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, torrent.DownloadDir);
+                var outputPath = torrent.DownloadDir;
+
+                // Transmission always returns path with forward slashes, even on windows.
+                if (outputPath.IsNotNullOrWhiteSpace() && (outputPath.StartsWith(@"\\") || outputPath.Contains(':')))
+                {
+                    outputPath = outputPath.Replace('/', '\\');
+                }
+
+                outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, outputPath);
 
                 if (Settings.TvCategory.IsNotNullOrWhiteSpace())
                 {
-                    var directories = outputPath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                    var directories = outputPath.Split('\\', '/');
                     if (!directories.Contains(String.Format(".{0}", Settings.TvCategory))) continue;
                 }
 
@@ -163,11 +171,22 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             var config = _proxy.GetConfig(Settings);
             var destDir = config.GetValueOrDefault("download-dir") as string;
+            
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                destDir = String.Format("{0}/.{1}", destDir, Settings.TvCategory);
+            }
+
+            // Transmission always returns path with forward slashes, even on windows.
+            if (destDir.StartsWith(@"\\") || destDir.Contains(':'))
+            {
+                destDir = destDir.Replace('/', '\\');
+            }
 
             return new DownloadClientStatus
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost",
-                OutputRootFolders = new List<string> { destDir }
+                OutputRootFolders = new List<string> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) }
             };
         }
 
