@@ -14,6 +14,7 @@ using FluentValidation.Results;
 using System.Net;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Core.Download.Clients.UTorrent
 {
@@ -107,6 +108,10 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 if (outputPath == null || Path.GetFileName(outputPath) == torrent.Name)
                 {
                     item.OutputPath = outputPath;
+                }
+                else if (OsInfo.IsWindows && outputPath.EndsWith(":"))
+                {
+                    item.OutputPath = Path.Combine(outputPath + Path.DirectorySeparatorChar, torrent.Name);
                 }
                 else
                 {
