@@ -5,8 +5,13 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.KickassTorrents
 {
-    public class KickassTorrentsRssParser : BasicTorrentRssParser
+    /*public class KickassTorrentsRssParser : TorrentRssParser
     {        
+        public KickassTorrentsRssParser()
+        {
+            UseEnclosureUrl = true;
+        }
+
         protected override String GetNzbUrl(XElement item)
         {
             var enclosure = item.Element("enclosure");
@@ -22,5 +27,5 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
         {
             return item.Links().FirstOrDefault();
         }
-    }
+    }*/
 }

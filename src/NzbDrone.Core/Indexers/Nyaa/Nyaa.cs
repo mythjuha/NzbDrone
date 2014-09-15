@@ -10,22 +10,23 @@ namespace NzbDrone.Core.Indexers.Nyaa
 {
     public class Nyaa : RssIndexerBase<NyaaSettings>
     {
-         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
+        public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
+        public override Int32 PageSize { get { return 100; } }
 
-         public Nyaa(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
+        public Nyaa(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, configService, parsingService, logger)
         {
 
         }
 
-         public override IIndexerRequestGenerator GetRequestGenerator()
-         {
-             return new NyaaRequestGenerator() { Settings = Settings };
-         }
+        public override IIndexerRequestGenerator GetRequestGenerator()
+        {
+            return new NyaaRequestGenerator() { Settings = Settings, PageSize = PageSize };
+        }
 
-         public override IParseIndexerResponse GetParser()
-         {
-             return new NyaaRssParser();
-         }
+        public override IParseIndexerResponse GetParser()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

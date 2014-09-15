@@ -20,31 +20,26 @@ namespace NzbDrone.Core.Test.IndexerTests.IPTorrentsTests
     [TestFixture]
     public class IPTorrentsFixture : CoreTest<IPTorrents>
     {
-        private String _recentFeed;
-
-        [TestFixtureSetUp]
-        public void SetupFixture()
+        [SetUp]
+        public void Setup()
         {
             Subject.Definition = new IndexerDefinition()
                                     {
                                         Name = "IPTorrents",
                                         Settings = new IPTorrentsSettings() {  Url = "http://fake.com/" }
                                     };
-
-            _recentFeed = ReadAllText(@"Files/RSS/IPTorrents.xml");
         }
 
         [Test]
         public void Indexer_TestFeedParser_IPTorrents()
         {
-            var httpClientMock = Mocker.GetMock<IHttpClient>();
-            httpClientMock.Setup(o => o.Get(It.IsAny<HttpRequest>()))
-                          .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), _recentFeed));
+            var recentFeed = ReadAllText(@"Files/RSS/IPTorrents.xml");
 
-            var httpClient = httpClientMock.Object;
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Get(It.IsAny<HttpRequest>()))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
-            var fetchService = new FetchFeedService(httpClient, TestLogger);
-            var releases = fetchService.FetchRss(Subject);
+            var releases = Subject.FetchRecent();
 
             releases.Should().HaveCount(5);
 

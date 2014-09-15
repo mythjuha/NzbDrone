@@ -3,43 +3,37 @@ using System.Collections.Generic;
 using NzbDrone.Core.ThingiProvider;
 using FluentValidation.Results;
 using System.Linq;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Parser;
+using NLog;
 
 namespace NzbDrone.Core.Indexers.IPTorrents
 {
-    public class IPTorrents : IndexerBase<IPTorrentsSettings>
+    public class IPTorrents : RssIndexerBase<IPTorrentsSettings>
     {
-        public override DownloadProtocol Protocol
+        public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
+        public override Boolean SupportsSearch { get { return false; } }
+        public override Int32 PageSize { get { return 0; } }
+
+        public IPTorrents(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(httpClient, configService, parsingService, logger)
         {
-            get
-            {
-                return DownloadProtocol.Torrent;
-            }
+
         }
 
-        public override Int32 SupportedPageSize
+        public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            get
-            {
-                return 0;
-            }
+            throw new NotImplementedException();
         }
 
-        public override Boolean SupportsSearch
+        public override IParseIndexerResponse GetParser()
         {
-            get
-            {
-                return false;
-            }
+            throw new NotImplementedException();
         }
+    }
 
-        public override IParseFeed Parser
-        {
-            get
-            {
-                return new IPTorrentsRssParser();
-            }
-        }
-
+    /*
         public override IEnumerable<String> RecentFeed
         {
             get
@@ -77,5 +71,5 @@ namespace NzbDrone.Core.Indexers.IPTorrents
         {
             return new ValidationResult();
         }
-    }
+    }*/
 }

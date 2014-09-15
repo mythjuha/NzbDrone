@@ -3,42 +3,36 @@ using System.Collections.Generic;
 using NzbDrone.Core.ThingiProvider;
 using FluentValidation.Results;
 using System.Linq;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
+using NLog;
+using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Indexers.BitMeTv
 {
-    public class BitMeTv : IndexerBase<BitMeTvSettings>
+    public class BitMeTv : RssIndexerBase<BitMeTvSettings>
     {
-        public override DownloadProtocol Protocol
+        public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
+        public override Boolean SupportsSearch { get { return false; } }
+        public override Int32 PageSize { get { return 0; } }
+
+        public BitMeTv(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(httpClient, configService, parsingService, logger)
         {
-            get
-            {
-                return DownloadProtocol.Torrent;
-            }
+
         }
 
-        public override Int32 SupportedPageSize
+        public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            get
-            {
-                return 0;
-            }
+            throw new NotImplementedException();
         }
 
-        public override Boolean SupportsSearch
+        public override IParseIndexerResponse GetParser()
         {
-            get
-            {
-                return false;
-            }
+            throw new NotImplementedException();
         }
-
-        public override IParseFeed Parser
-        {
-            get
-            {
-                return new BitMeTvRssParser();
-            }
-        }
+    }
+    /*
 
         public override IEnumerable<String> RecentFeed
         {
@@ -82,5 +76,5 @@ namespace NzbDrone.Core.Indexers.BitMeTv
         {
             return new ValidationResult();
         }
-    }
+    }*/
 }

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.Indexers.BitMeTv
 {
-    public class BitMeTvRssParser : BasicTorrentRssParser
+    /*public class BitMeTvRssParser : BasicTorrentRssParser
     {
         protected override XElement GetTorrentElement(XElement item)
         {
@@ -18,5 +18,5 @@ namespace NzbDrone.Core.Indexers.BitMeTv
         {
             return ParseSize(torrentElement.Description(), true);
         }
-    }
+    }*/
 }

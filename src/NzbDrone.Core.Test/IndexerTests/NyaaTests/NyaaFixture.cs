@@ -14,31 +14,26 @@ namespace NzbDrone.Core.Test.IndexerTests.NyaaTests
     [TestFixture]
     public class NyaaFixture : CoreTest<Nyaa>
     {
-        private String _recentFeed;
-
-        [TestFixtureSetUp]
-        public void SetupFixture()
+        [SetUp]
+        public void Setup()
         {
             Subject.Definition = new IndexerDefinition()
                 {
                     Name = "Nyaa",
                     Settings = new NyaaSettings()
                 };
-
-            _recentFeed = ReadAllText(@"Files/RSS/Nyaa.xml");
         }
 
         [Test]
         public void Indexer_TestFeedParser_Nyaa()
         {
-            var httpClientMock = Mocker.GetMock<IHttpClient>();
-            httpClientMock.Setup(o => o.Get(It.IsAny<HttpRequest>()))
-                          .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), _recentFeed));
+            var recentFeed = ReadAllText(@"Files/RSS/Nyaa.xml");
 
-            var httpClient = httpClientMock.Object;
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Get(It.IsAny<HttpRequest>()))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
-            var fetchService = new FetchFeedService(httpClient, TestLogger);
-            var releases = fetchService.FetchRss(Subject);
+            var releases = Subject.FetchRecent();
 
             releases.Should().HaveCount(4);
 

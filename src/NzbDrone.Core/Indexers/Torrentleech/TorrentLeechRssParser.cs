@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.Indexers.Torrentleech
 {
-    public class TorrentleechRssParser : BasicTorrentRssParser
+    /*public class TorrentleechRssParser : BasicTorrentRssParser
     {
         readonly Regex _descriptionRegex = new Regex(@"Seeders: (?<seeds>\d+) - Leechers: (?<peers>\d+)", RegexOptions.Compiled);
 
@@ -34,5 +34,5 @@ namespace NzbDrone.Core.Indexers.Torrentleech
             var matches = _descriptionRegex.Match(description);
             return Convert.ToInt32(matches.Groups["seeds"].Value);
         }
-    }
+    }*/
 }

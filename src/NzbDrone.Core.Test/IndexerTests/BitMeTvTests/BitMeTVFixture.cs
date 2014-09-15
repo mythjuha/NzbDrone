@@ -20,31 +20,26 @@ namespace NzbDrone.Core.Test.IndexerTests.BitMeTvTests
     [TestFixture]
     public class BitMeTvFixture : CoreTest<BitMeTv>
     {
-        private String _recentFeed;
-
-        [TestFixtureSetUp]
-        public void SetupFixture()
+        [SetUp]
+        public void Setup()
         {
             Subject.Definition = new IndexerDefinition()
                                      {
                                          Name = "BitMeTV",
                                          Settings = new BitMeTvSettings()
                                      };
-
-            _recentFeed = ReadAllText(@"Files/RSS/BitMeTv.xml");
         }
 
         [Test]
         public void Indexer_TestFeedParser_BitMeTv()
         {
-            var httpClientMock = Mocker.GetMock<IHttpClient>();
-            httpClientMock.Setup(o => o.Get(It.IsAny<HttpRequest>()))
-                          .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), _recentFeed));
+            var recentFeed = ReadAllText(@"Files/RSS/BitMeTv.xml");
 
-            var httpClient = httpClientMock.Object;
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Get(It.IsAny<HttpRequest>()))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
-            var fetchService = new FetchFeedService(httpClient, TestLogger);
-            var releases = fetchService.FetchRss(Subject);
+            var releases = Subject.FetchRecent();
 
             releases.Should().HaveCount(5);
 

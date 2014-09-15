@@ -423,6 +423,7 @@
     <Compile Include="Indexers\EzrssTorrentRssParser.cs" />
     <Compile Include="Indexers\Eztv\Eztv.cs" />
     <Compile Include="Indexers\Eztv\EztvSettings.cs" />
+    <Compile Include="Indexers\Eztv\EztvRequestGenerator.cs" />
     <Compile Include="Indexers\Fanzub\Fanzub.cs" />
     <Compile Include="Indexers\Fanzub\FanzubRequestGenerator.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />

@@ -3,7 +3,7 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Torrentleech;
+using NzbDrone.Core.Indexers.Eztv;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.ThingiProvider;
@@ -15,25 +15,25 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 
-namespace NzbDrone.Core.Test.IndexerTests.TorrentleechTests
+namespace NzbDrone.Core.Test.IndexerTests.EztvTests
 {
     [TestFixture]
-    public class TorrentleechFixture : CoreTest<Torrentleech>
+    public class EztvFixture : CoreTest<Eztv>
     {
         [SetUp]
         public void Setup()
         {
             Subject.Definition = new IndexerDefinition()
                 {
-                    Name = "Torrentleech",
-                    Settings = new TorrentleechSettings()
+                    Name = "Eztv",
+                    Settings = new EztvSettings()
                 };
         }
 
         [Test]
-        public void Indexer_TestFeedParser_Torrentleech()
+        public void Indexer_TestFeedParser_Eztv()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/Torrentleech.xml");
+            var recentFeed = ReadAllText(@"Files/RSS/Eztv.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Get(It.IsAny<HttpRequest>()))
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentleechTests
 
             var releases = Subject.FetchRecent();
 
-            releases.Should().HaveCount(5);
+            releases.Should().HaveCount(3);
 
             var firstRelease = releases.First();
 
@@ -49,16 +49,16 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentleechTests
 
             var torrentInfo = (TorrentInfo)firstRelease;
 
-            torrentInfo.Title.Should().Be("Classic Car Rescue S02E04 720p HDTV x264-C4TV");
+            torrentInfo.Title.Should().Be("S4C I Grombil Cyfandir Pell American Interior [PDTV - MVGROUP]");
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
-            torrentInfo.DownloadUrl.Should().Be("http://www.torrentleech.org/rss/download/513575/1234/Classic.Car.Rescue.S02E04.720p.HDTV.x264-C4TV.torrent");
+            torrentInfo.DownloadUrl.Should().Be("http://re.zoink.it/20a4ed4eFC");
             torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
-            firstRelease.PublishDate.Should().Be(DateTime.Parse("2014/05/12 19:15:28"));
-            torrentInfo.Size.Should().Be(0);
-            torrentInfo.InfoHash.Should().Be(null);
-            torrentInfo.MagnetUrl.Should().Be(null);
-            torrentInfo.Peers.Should().Be(7);
-            torrentInfo.Seeds.Should().Be(1);
+            firstRelease.PublishDate.Should().Be(DateTime.Parse("2014/09/15 18:39:00"));
+            torrentInfo.Size.Should().Be(796606175);
+            torrentInfo.InfoHash.Should().Be("20FC4FBFA88272274AC671F857CC15144E9AA83E");
+            torrentInfo.MagnetUrl.Should().Be("magnet:?xt=urn:btih:ED6E7P5IQJZCOSWGOH4FPTAVCRHJVKB6&dn=S4C.I.Grombil.Cyfandir.Pell.American.Interior.PDTV.x264-MVGroup");
+            torrentInfo.Peers.Should().NotHaveValue();
+            torrentInfo.Seeds.Should().NotHaveValue();
         }
     }
 }

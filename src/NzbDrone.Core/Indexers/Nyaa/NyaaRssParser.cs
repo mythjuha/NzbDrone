@@ -7,6 +7,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Nyaa
 {
+    /*
     public class NyaaRssParser : BasicTorrentRssParser
     {
         readonly Regex _descriptionRegex = new Regex(@"(?<seeders>\d+) seeder\(s\), (?<peers>\d+) leecher\(s\), (?<downloads>\d+) download\(s\) - (?<size>\d+(?:\.\d+)? [KMG]i?B)", RegexOptions.Compiled);
@@ -82,5 +83,5 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
             return peers;
         }
-    }
+    }*/
 }

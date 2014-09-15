@@ -128,11 +128,11 @@ namespace NzbDrone.Core.Indexers
         {
             if (UseEnclosureUrl)
             {
-                return item.Elements("enclosure").First().Attribute("url").Value;
+                return item.Element("enclosure").Attribute("url").Value;
             }
             else
             {
-                return item.Elements("link").First().Value;
+                return item.Element("link").Value;
             }
         }
 

@@ -7,7 +7,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.IPTorrents
 {
-    public class IPTorrentsRssParser : BasicTorrentRssParser
+    /*public class IPTorrentsRssParser : BasicTorrentRssParser
     {
         readonly Regex _sizeRegex = new Regex(@"(?<size>\d+(?:\.\d+)? [KMG]i?B)", RegexOptions.Compiled);
 
@@ -25,5 +25,5 @@ namespace NzbDrone.Core.Indexers.IPTorrents
 
             return ParseSize(sizeString, true);
         }
-    }
+    }*/
 }
