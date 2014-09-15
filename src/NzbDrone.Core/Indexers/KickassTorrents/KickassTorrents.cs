@@ -1,12 +1,8 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser;
-using NzbDrone.Core.ThingiProvider;
-using FluentValidation.Results;
 
 namespace NzbDrone.Core.Indexers.KickassTorrents
 {

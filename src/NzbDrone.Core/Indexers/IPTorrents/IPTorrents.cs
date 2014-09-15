@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Indexers.IPTorrents
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            throw new NotImplementedException();
+            return new IPTorrentsRequestGenerator();
         }
 
         public override IParseIndexerResponse GetParser()
@@ -32,44 +32,4 @@ namespace NzbDrone.Core.Indexers.IPTorrents
             throw new NotImplementedException();
         }
     }
-
-    /*
-        public override IEnumerable<String> RecentFeed
-        {
-            get
-            {
-                yield return Settings.Url;
-            }
-        }
-
-        public override IEnumerable<String> GetEpisodeSearchUrls(List<String> titles, Int32 tvRageId, Int32 seasonNumber, Int32 episodeNumber)
-        {
-            return Enumerable.Empty<String>();
-        }
-
-        public override IEnumerable<String> GetDailyEpisodeSearchUrls(List<String> titles, Int32 tvRageId, DateTime date)
-        {
-            return Enumerable.Empty<String>();
-        }
-
-        public override IEnumerable<String> GetAnimeEpisodeSearchUrls(List<String> titles, Int32 tvRageId, Int32 absoluteEpisodeNumber)
-        {
-            return Enumerable.Empty<String>();
-        }
-
-        public override IEnumerable<String> GetSeasonSearchUrls(List<String> titles, Int32 tvRageId, Int32 seasonNumber, Int32 offset)
-        {
-            return Enumerable.Empty<String>();
-        }
-
-        public override IEnumerable<String> GetSearchUrls(String query, Int32 offset)
-        {
-            return Enumerable.Empty<String>();
-        }
-
-        public override ValidationResult Test()
-        {
-            return new ValidationResult();
-        }
-    }*/
 }

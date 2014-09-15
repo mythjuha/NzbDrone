@@ -417,6 +417,7 @@
     <Compile Include="Indexers\BitMeTv\BitMeTv.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvRssParser.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvSettings.cs" />
+    <Compile Include="Indexers\BitMeTv\BitMeTvRequestGenerator.cs" />
     <Compile Include="Indexers\DownloadProtocol.cs" />
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
     <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
@@ -438,6 +439,7 @@
     <Compile Include="Indexers\IndexerRequest.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\IProcessIndexerResponse.cs" />
+    <Compile Include="Indexers\IPTorrents\IPTorrentsRequestGenerator.cs" />
     <Compile Include="Indexers\IPTorrents\IPTorrents.cs" />
     <Compile Include="Indexers\IPTorrents\IPTorrentsRssParser.cs" />
     <Compile Include="Indexers\IPTorrents\IPTorrentsSettings.cs" />
@@ -465,6 +467,7 @@
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Indexers\RssSyncCompleteEvent.cs" />
     <Compile Include="Indexers\RssSyncService.cs" />
+    <Compile Include="Indexers\Torrentleech\TorrentleechRequestGenerator.cs" />
     <Compile Include="Indexers\Torrentleech\Torrentleech.cs" />
     <Compile Include="Indexers\Torrentleech\TorrentleechRssParser.cs" />
     <Compile Include="Indexers\Torrentleech\TorrentleechSettings.cs" />

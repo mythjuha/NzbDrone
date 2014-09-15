@@ -1,0 +1,51 @@
+﻿using System;
+using System.Collections.Generic;
+using NzbDrone.Common;
+using NzbDrone.Core.IndexerSearch.Definitions;
+
+namespace NzbDrone.Core.Indexers.Torrentleech
+{
+    public class TorrentleechRequestGenerator : IIndexerRequestGenerator
+    {
+        public TorrentleechSettings Settings { get; set; }
+        
+        public virtual IList<IEnumerable<IndexerRequest>> GetRecentRequests()
+        {
+            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+
+            pageableRequests.AddIfNotNull(GetRssRequests(null));
+
+            return pageableRequests;
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
+        {
+            return null;
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SeasonSearchCriteria searchCriteria)
+        {
+            return null;
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        {
+            return null;
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
+        {
+            return null;
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
+        {
+            return null;
+        }
+
+        private IEnumerable<IndexerRequest> GetRssRequests(String searchParameters)
+        {
+            yield return new IndexerRequest(String.Format("{0}/{1}{2}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.ApiKey, searchParameters));
+        }
+    }
+}
