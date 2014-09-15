@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
         public override IParseIndexerResponse GetParser()
         {
-            throw new NotImplementedException();
+            return new TorrentRssParser() { UseGuidInfoUrl = true, ParseSizeInDescription = true, ParseSeedersInDescription = true };
         }
     }
 }

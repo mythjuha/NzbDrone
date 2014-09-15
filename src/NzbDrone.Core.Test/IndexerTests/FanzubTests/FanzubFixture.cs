@@ -43,6 +43,8 @@ namespace NzbDrone.Core.Test.IndexerTests.FanzubTests
             releaseInfo.Title.Should().Be("[Vivid] Hanayamata - 10 [A33D6606]");
             releaseInfo.DownloadProtocol.Should().Be(DownloadProtocol.Usenet);
             releaseInfo.DownloadUrl.Should().Be("http://fanzub.com/nzb/296464/Vivid%20Hanayamata%20-%2010.nzb");
+            releaseInfo.InfoUrl.Should().BeNullOrEmpty();
+            releaseInfo.CommentUrl.Should().BeNullOrEmpty();
             releaseInfo.Indexer.Should().Be(Subject.Definition.Name);
             releaseInfo.PublishDate.Should().Be(DateTime.Parse("2014/09/13 12:56:53"));
             releaseInfo.Size.Should().Be(556246858);

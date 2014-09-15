@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentleechTests
         }
 
         [Test]
-        public void Indexer_TestFeedParser_Torrentleech()
+        public void should_parse_recent_feed_from_Torrentleech()
         {
             var recentFeed = ReadAllText(@"Files/RSS/Torrentleech.xml");
 
@@ -42,18 +42,17 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentleechTests
             var releases = Subject.FetchRecent();
 
             releases.Should().HaveCount(5);
+            releases.First().Should().BeOfType<TorrentInfo>();
 
-            var firstRelease = releases.First();
-
-            Assert.IsInstanceOf<TorrentInfo>(firstRelease);
-
-            var torrentInfo = (TorrentInfo)firstRelease;
+            var torrentInfo = releases.First() as TorrentInfo;
 
             torrentInfo.Title.Should().Be("Classic Car Rescue S02E04 720p HDTV x264-C4TV");
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
             torrentInfo.DownloadUrl.Should().Be("http://www.torrentleech.org/rss/download/513575/1234/Classic.Car.Rescue.S02E04.720p.HDTV.x264-C4TV.torrent");
+            torrentInfo.InfoUrl.Should().Be("http://www.torrentleech.org/torrent/513575");
+            torrentInfo.CommentUrl.Should().Be("http://www.torrentleech.org/torrent/513575#comments");
             torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
-            firstRelease.PublishDate.Should().Be(DateTime.Parse("2014/05/12 19:15:28"));
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("2014/05/12 19:15:28"));
             torrentInfo.Size.Should().Be(0);
             torrentInfo.InfoHash.Should().Be(null);
             torrentInfo.MagnetUrl.Should().Be(null);

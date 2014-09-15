@@ -23,12 +23,12 @@ namespace NzbDrone.Core.Indexers.Torrentleech
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new TorrentleechRequestGenerator();
+            return new TorrentleechRequestGenerator() { Settings = Settings };
         }
 
         public override IParseIndexerResponse GetParser()
         {
-            throw new NotImplementedException();
+            return new TorrentRssParser() { UseGuidInfoUrl = true, ParseSeedersInDescription = true };
         }
     }
 }

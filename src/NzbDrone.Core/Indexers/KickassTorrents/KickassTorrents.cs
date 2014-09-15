@@ -17,14 +17,14 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
 
         }
 
-         public override IIndexerRequestGenerator GetRequestGenerator()
-         {
-             return new KickassTorrentsRequestGenerator() { Settings = Settings, PageSize = PageSize };
-         }
+        public override IIndexerRequestGenerator GetRequestGenerator()
+        {
+            return new KickassTorrentsRequestGenerator() { Settings = Settings, PageSize = PageSize };
+        }
 
-         public override IParseIndexerResponse GetParser()
-         {
-             throw new NotImplementedException();
-         }
+        public override IParseIndexerResponse GetParser()
+        {
+            return new KickassTorrentsRssParser();
+        }
     }
 }

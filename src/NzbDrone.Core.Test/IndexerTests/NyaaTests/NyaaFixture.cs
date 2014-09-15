@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NyaaTests
         }
 
         [Test]
-        public void Indexer_TestFeedParser_Nyaa()
+        public void should_parse_recent_feed_from_Nyaa()
         {
             var recentFeed = ReadAllText(@"Files/RSS/Nyaa.xml");
 
@@ -36,18 +36,17 @@ namespace NzbDrone.Core.Test.IndexerTests.NyaaTests
             var releases = Subject.FetchRecent();
 
             releases.Should().HaveCount(4);
+            releases.First().Should().BeOfType<TorrentInfo>();
 
-            var firstRelease = releases.First();
-
-            Assert.IsInstanceOf<TorrentInfo>(firstRelease);
-
-            var torrentInfo = (TorrentInfo)firstRelease;
+            var torrentInfo = releases.First() as TorrentInfo;
 
             torrentInfo.Title.Should().Be("[TSRaws] Futsuu no Joshikousei ga [Locodol] Yattemita. #07 (TBS).ts");
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
             torrentInfo.DownloadUrl.Should().Be("http://www.nyaa.se/?page=download&tid=587750");
+            torrentInfo.InfoUrl.Should().Be("http://www.nyaa.se/?page=view&tid=587750");
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
             torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
-            firstRelease.PublishDate.Should().Be(DateTime.Parse("2014/08/14 18:10:36"));
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("2014/08/14 18:10:36"));
             torrentInfo.Size.Should().Be(2523293286); //2.35 GiB
             torrentInfo.InfoHash.Should().Be(null);
             torrentInfo.MagnetUrl.Should().Be(null);

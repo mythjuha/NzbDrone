@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Indexers
         
         public EzrssTorrentRssParser()
         {
+            UseGuidInfoUrl = true;
             UseEnclosureLength = false;
             UseEnclosureUrl = true;
         }
@@ -26,16 +27,11 @@ namespace NzbDrone.Core.Indexers
                 element = item.Element(ns + "torrent");
                 if (element != null)
                 {
-                    element = item.Element(ns + name);
+                    element = element.Element(ns + name);
                 }
             }
 
             return element;
-        }
-
-        protected override String GetInfoUrl(XElement item)
-        {
-            return (String)item.Element("link");
         }
 
         protected override Int64 GetSize(XElement item)

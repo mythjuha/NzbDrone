@@ -47,6 +47,8 @@ namespace NzbDrone.Core.Test.IndexerTests.OmgwtfnzbsTests
             releaseInfo.Title.Should().Be("Stephen.Fry.Gadget.Man.S01E05.HDTV.x264-C4TV");
             releaseInfo.DownloadProtocol.Should().Be(DownloadProtocol.Usenet);
             releaseInfo.DownloadUrl.Should().Be("http://api.omgwtfnzbs.org/sn.php?id=OAl4g&user=nzbdrone&api=nzbdrone");
+            releaseInfo.InfoUrl.Should().Be("http://omgwtfnzbs.org/details.php?id=OAl4g");
+            releaseInfo.CommentUrl.Should().BeNullOrEmpty();
             releaseInfo.Indexer.Should().Be(Subject.Definition.Name);
             releaseInfo.PublishDate.Should().Be(DateTime.Parse("2012/12/17 23:30:13"));
             releaseInfo.Size.Should().Be(236822906);

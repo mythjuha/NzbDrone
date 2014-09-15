@@ -24,12 +24,12 @@ namespace NzbDrone.Core.Indexers.IPTorrents
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new IPTorrentsRequestGenerator();
+            return new IPTorrentsRequestGenerator() { Settings = Settings };
         }
 
         public override IParseIndexerResponse GetParser()
         {
-            throw new NotImplementedException();
+            return new TorrentRssParser() { ParseSizeInDescription = true };
         }
     }
 }

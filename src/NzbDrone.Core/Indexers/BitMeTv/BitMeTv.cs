@@ -24,12 +24,12 @@ namespace NzbDrone.Core.Indexers.BitMeTv
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new BitMeTvRequestGenerator();
+            return new BitMeTvRequestGenerator() { Settings = Settings };
         }
 
         public override IParseIndexerResponse GetParser()
         {
-            throw new NotImplementedException();
+            return new TorrentRssParser() { ParseSizeInDescription = true };
         }
     }
 }

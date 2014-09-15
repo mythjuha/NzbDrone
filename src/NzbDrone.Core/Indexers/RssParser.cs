@@ -19,8 +19,11 @@ namespace NzbDrone.Core.Indexers
     {
         protected readonly Logger _logger;
 
+        public Boolean UseGuidInfoUrl { get; set; }
         public Boolean UseEnclosureUrl { get; set; }
         public Boolean UseEnclosureLength { get; set; }
+
+        public Boolean ParseSizeInDescription { get; set; }
 
         public RssParser()
         {
@@ -67,6 +70,12 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual Boolean PreProcess(IndexerResponse indexerResponse)
         {
+            if (indexerResponse.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                // TODO
+                throw new Exception();
+            }
+
             return true;
         }
 
@@ -138,12 +147,17 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual string GetInfoUrl(XElement item)
         {
+            if (UseGuidInfoUrl)
+            {
+                return (String)item.Element("guid");
+            }
+
             return String.Empty;
         }
 
         protected virtual string GetCommentUrl(XElement item)
         {
-            return String.Empty;
+            return (String)item.Element("comments");
         }
 
         protected virtual long GetSize(XElement item)
@@ -151,6 +165,10 @@ namespace NzbDrone.Core.Indexers
             if (UseEnclosureLength)
             {
                 return GetEnclosureLength(item);
+            }
+            else if (ParseSizeInDescription)
+            {
+                return ParseSize(item.Element("description").Value, true);
             }
 
             return 0;
@@ -168,12 +186,12 @@ namespace NzbDrone.Core.Indexers
             return 0;
         }
 
-        private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>GB|MB|GiB|MiB)",
-                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex ParseSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>[KMG]i?B)",
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static Int64 ParseSize(String sizeString, Boolean defaultToBinaryPrefix)
         {
-            var match = ReportSizeRegex.Matches(sizeString);
+            var match = ParseSizeRegex.Matches(sizeString);
 
             if (match.Count != 0)
             {

@@ -5,27 +5,21 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.KickassTorrents
 {
-    /*public class KickassTorrentsRssParser : TorrentRssParser
-    {        
+    public class KickassTorrentsRssParser : EzrssTorrentRssParser
+    {
         public KickassTorrentsRssParser()
         {
-            UseEnclosureUrl = true;
+
         }
 
-        protected override String GetNzbUrl(XElement item)
+        protected override bool PreProcess(IndexerResponse indexerResponse)
         {
-            var enclosure = item.Element("enclosure");
-            return enclosure.Attribute("url").Value;
-        }
+            if (indexerResponse.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return false;
+            }
 
-        protected override XElement GetTorrentElement(XElement item)
-        {
-            return item;
+            return base.PreProcess(indexerResponse);
         }
-
-        protected override string GetNzbInfoUrl(XElement item)
-        {
-            return item.Links().FirstOrDefault();
-        }
-    }*/
+    }
 }

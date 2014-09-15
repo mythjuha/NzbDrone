@@ -415,7 +415,6 @@
     <Compile Include="Indexers\Animezb\Animezb.cs" />
     <Compile Include="Indexers\Animezb\AnimezbRequestGenerator.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTv.cs" />
-    <Compile Include="Indexers\BitMeTv\BitMeTvRssParser.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvSettings.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvRequestGenerator.cs" />
     <Compile Include="Indexers\DownloadProtocol.cs" />
@@ -441,7 +440,6 @@
     <Compile Include="Indexers\IProcessIndexerResponse.cs" />
     <Compile Include="Indexers\IPTorrents\IPTorrentsRequestGenerator.cs" />
     <Compile Include="Indexers\IPTorrents\IPTorrents.cs" />
-    <Compile Include="Indexers\IPTorrents\IPTorrentsRssParser.cs" />
     <Compile Include="Indexers\IPTorrents\IPTorrentsSettings.cs" />
     <Compile Include="Indexers\KickassTorrents\KickassTorrents.cs" />
     <Compile Include="Indexers\KickassTorrents\KickassTorrentsRssParser.cs" />
@@ -456,7 +454,6 @@
     <Compile Include="Indexers\Nyaa\NyaaRequestGenerator.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRequestGenerator.cs" />
     <Compile Include="Indexers\Nyaa\Nyaa.cs" />
-    <Compile Include="Indexers\Nyaa\NyaaRssParser.cs" />
     <Compile Include="Indexers\Nyaa\NyaaSettings.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRssParser.cs" />
@@ -469,7 +466,6 @@
     <Compile Include="Indexers\RssSyncService.cs" />
     <Compile Include="Indexers\Torrentleech\TorrentleechRequestGenerator.cs" />
     <Compile Include="Indexers\Torrentleech\Torrentleech.cs" />
-    <Compile Include="Indexers\Torrentleech\TorrentleechRssParser.cs" />
     <Compile Include="Indexers\Torrentleech\TorrentleechSettings.cs" />
     <Compile Include="Indexers\TorrentRssParser.cs" />
     <Compile Include="Indexers\Wombles\Wombles.cs" />
