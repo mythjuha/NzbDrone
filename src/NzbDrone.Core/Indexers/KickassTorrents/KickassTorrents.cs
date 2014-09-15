@@ -1,45 +1,38 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using NLog;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.ThingiProvider;
 using FluentValidation.Results;
 
 namespace NzbDrone.Core.Indexers.KickassTorrents
 {
-    public class KickassTorrents : IndexerBase<KickassTorrentsSettings>
+    public class KickassTorrents : RssIndexerBase<KickassTorrentsSettings>
     {
-        public override DownloadProtocol Protocol
+        public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
+
+        public KickassTorrents(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(httpClient, configService, parsingService, logger)
         {
-            get
-            {
-                return DownloadProtocol.Torrent;
-            }
+
         }
 
+         public override IIndexerRequestGenerator GetRequestGenerator()
+         {
+             return new KickassTorrentsRequestGenerator() { Settings = Settings };
+         }
 
-        public override Int32 SupportedPageSize
-        {
-            get
-            {
-                return 25;
-            }
-        }
+         public override IParseIndexerResponse GetParser()
+         {
+             return new KickassTorrentsRssParser();
+         }
 
-        public override Boolean SupportsSearch
-        {
-            get
-            {
-                return true;
-            }
-        }
 
-        public override IParseFeed Parser
-        {
-            get
-            {
-                return new KickassTorrentsRssParser();
-            }
-        }
+
+
 
         public override IEnumerable<String> RecentFeed
         {

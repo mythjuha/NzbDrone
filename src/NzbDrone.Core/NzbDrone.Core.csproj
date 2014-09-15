@@ -443,12 +443,14 @@
     <Compile Include="Indexers\KickassTorrents\KickassTorrents.cs" />
     <Compile Include="Indexers\KickassTorrents\KickassTorrentsRssParser.cs" />
     <Compile Include="Indexers\KickassTorrents\KickassTorrentsSettings.cs" />
+    <Compile Include="Indexers\KickassTorrents\KickassTorrentsRequestGenerator.cs" />
     <Compile Include="Indexers\Newznab\Newznab.cs" />
     <Compile Include="Indexers\Newznab\NewznabException.cs" />
     <Compile Include="Indexers\Newznab\NewznabRequestGenerator.cs" />
     <Compile Include="Indexers\Newznab\NewznabRssParser.cs" />
     <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
     <Compile Include="Indexers\Exceptions\SizeParsingException.cs" />
+    <Compile Include="Indexers\Nyaa\NyaaRequestGenerator.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRequestGenerator.cs" />
     <Compile Include="Indexers\Nyaa\Nyaa.cs" />
     <Compile Include="Indexers\Nyaa\NyaaRssParser.cs" />
