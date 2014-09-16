@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Indexers.Torrentleech
@@ -45,7 +46,7 @@ namespace NzbDrone.Core.Indexers.Torrentleech
 
         private IEnumerable<IndexerRequest> GetRssRequests(String searchParameters)
         {
-            yield return new IndexerRequest(String.Format("{0}/{1}{2}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.ApiKey, searchParameters));
+            yield return new IndexerRequest(String.Format("{0}/{1}{2}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.ApiKey, searchParameters), HttpAccept.Rss);
         }
     }
 }

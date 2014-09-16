@@ -8,8 +8,8 @@ namespace NzbDrone.Core.Indexers
 {
     public class IndexerRequest : HttpRequest
     {
-        public IndexerRequest(String url)
-            : base(url)
+        public IndexerRequest(String url, HttpAccept httpAccept)
+            : base(url, httpAccept)
         {
         }
     }

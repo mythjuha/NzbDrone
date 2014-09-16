@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Indexers.IPTorrents
@@ -45,7 +46,7 @@ namespace NzbDrone.Core.Indexers.IPTorrents
 
         private IEnumerable<IndexerRequest> GetRssRequests()
         {
-            yield return new IndexerRequest(Settings.Url);
+            yield return new IndexerRequest(Settings.Url, HttpAccept.Rss);
         }
     }
 }

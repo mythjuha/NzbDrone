@@ -8,7 +8,7 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Indexers.Nyaa
 {
-    public class Nyaa : RssIndexerBase<NyaaSettings>
+    public class Nyaa : HttpIndexerBase<NyaaSettings>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
         public override Int32 PageSize { get { return 100; } }

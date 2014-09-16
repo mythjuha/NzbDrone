@@ -16,7 +16,7 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
-    public abstract class RssIndexerBase<TSettings> : IndexerBase<TSettings>
+    public abstract class HttpIndexerBase<TSettings> : IndexerBase<TSettings>
         where TSettings : IProviderConfig, new()
     {
         private const Int32 MaxNumResultsPerQuery = 1000;
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Indexers
         public abstract IIndexerRequestGenerator GetRequestGenerator();
         public abstract IParseIndexerResponse GetParser();
 
-        public RssIndexerBase(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
+        public HttpIndexerBase(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(configService, parsingService, logger)
         {
             _httpClient = httpClient;
@@ -148,10 +148,9 @@ namespace NzbDrone.Core.Indexers
             try
             {
                 _logger.Debug("Downloading Feed " + request.Url);
-                request.Headers.Accept = "application/rss+xml, text/rss+xml, text/xml";
                 var response = new IndexerResponse(_httpClient.Get(request));
 
-                if (response.Headers.ContentType != null && response.Headers.ContentType.StartsWith("text/html"))
+                if (response.Headers.ContentType != null && response.Headers.ContentType.StartsWith("text/html") && !request.Headers.Accept.Contains("text/html"))
                 {
                     throw new WebException("Indexer responded with html content. Site is likely blocked or unavailable.");
                 }

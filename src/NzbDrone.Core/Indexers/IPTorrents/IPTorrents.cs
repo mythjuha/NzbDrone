@@ -10,7 +10,7 @@ using NLog;
 
 namespace NzbDrone.Core.Indexers.IPTorrents
 {
-    public class IPTorrents : RssIndexerBase<IPTorrentsSettings>
+    public class IPTorrents : HttpIndexerBase<IPTorrentsSettings>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
         public override Boolean SupportsSearch { get { return false; } }

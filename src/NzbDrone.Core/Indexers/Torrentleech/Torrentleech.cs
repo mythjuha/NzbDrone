@@ -9,7 +9,7 @@ using NLog;
 
 namespace NzbDrone.Core.Indexers.Torrentleech
 {
-    public class Torrentleech : RssIndexerBase<TorrentleechSettings>
+    public class Torrentleech : HttpIndexerBase<TorrentleechSettings>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
         public override Boolean SupportsSearch { get { return false; } }

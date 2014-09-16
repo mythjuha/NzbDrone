@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Indexers.Nyaa
@@ -87,13 +88,13 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
             if (PageSize == 0)
             {
-                yield return new IndexerRequest(String.Format("{0}{1}", baseUrl, searchParameters));
+                yield return new IndexerRequest(String.Format("{0}{1}", baseUrl, searchParameters), HttpAccept.Rss);
             }
             else
             {
                 for (var page = 0; page < maxPages; page++)
                 {
-                    yield return new IndexerRequest(String.Format("{0}&offset={1}{2}", baseUrl, page + 1, searchParameters));
+                    yield return new IndexerRequest(String.Format("{0}&offset={1}{2}", baseUrl, page + 1, searchParameters), HttpAccept.Rss);
                 }
             }
         }

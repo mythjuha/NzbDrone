@@ -18,7 +18,6 @@ using FluentAssertions;
 namespace NzbDrone.Core.Test.IndexerTests.IPTorrentsTests
 {
     [TestFixture]
-    [Category("IndexerTests")]
     public class IPTorrentsFixture : CoreTest<IPTorrents>
     {
         [SetUp]

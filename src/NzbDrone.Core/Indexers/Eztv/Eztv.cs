@@ -10,7 +10,7 @@ using NLog;
 
 namespace NzbDrone.Core.Indexers.Eztv
 {
-    public class Eztv : RssIndexerBase<EztvSettings>
+    public class Eztv : HttpIndexerBase<EztvSettings>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
 

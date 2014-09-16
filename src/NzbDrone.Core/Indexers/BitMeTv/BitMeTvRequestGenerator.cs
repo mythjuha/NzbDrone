@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Indexers.BitMeTv
@@ -45,7 +46,7 @@ namespace NzbDrone.Core.Indexers.BitMeTv
 
         private IEnumerable<IndexerRequest> GetRssRequests(String searchParameters)
         {
-            yield return new IndexerRequest(String.Format("{0}/rss.php?uid={1}&passkey={2}{3}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.UserId, Settings.RssPasskey, searchParameters));
+            yield return new IndexerRequest(String.Format("{0}/rss.php?uid={1}&passkey={2}{3}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.UserId, Settings.RssPasskey, searchParameters), HttpAccept.Rss);
         }
     }
 }

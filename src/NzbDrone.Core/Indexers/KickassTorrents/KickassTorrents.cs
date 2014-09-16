@@ -6,7 +6,7 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Indexers.KickassTorrents
 {
-    public class KickassTorrents : RssIndexerBase<KickassTorrentsSettings>
+    public class KickassTorrents : HttpIndexerBase<KickassTorrentsSettings>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
         public override Int32 PageSize { get { return 25; } }

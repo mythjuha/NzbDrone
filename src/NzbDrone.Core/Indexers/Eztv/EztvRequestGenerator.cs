@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Indexers.Eztv
 
         private IEnumerable<IndexerRequest> GetPagedRequests(String query)
         {
-            yield return new IndexerRequest(Settings.BaseUrl.TrimEnd('/') + query);
+            yield return new IndexerRequest(Settings.BaseUrl.TrimEnd('/') + query, HttpAccept.Rss);
         }
     }
 }

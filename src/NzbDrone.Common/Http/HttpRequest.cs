@@ -9,12 +9,17 @@ namespace NzbDrone.Common.Http
 
         private readonly Dictionary<string, string> _segments;
 
-        public HttpRequest(string url)
+        public HttpRequest(string url, HttpAccept httpAccept = null)
         {
             UriBuilder = new UriBuilder(url);
             Headers = new HttpHeader();
             _segments = new Dictionary<string, string>();
             AllowAutoRedirect = true;
+
+            if (httpAccept != null)
+            {
+                Headers.Accept = httpAccept;
+            }
         }
 
         public UriBuilder UriBuilder { get; private set; }

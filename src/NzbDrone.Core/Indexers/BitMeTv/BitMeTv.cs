@@ -10,7 +10,7 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Indexers.BitMeTv
 {
-    public class BitMeTv : RssIndexerBase<BitMeTvSettings>
+    public class BitMeTv : HttpIndexerBase<BitMeTvSettings>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
         public override Boolean SupportsSearch { get { return false; } }
